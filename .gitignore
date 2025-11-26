@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large media files (only exclude the biggest ones)
+/public/videos/thai_food_01.glb
+
