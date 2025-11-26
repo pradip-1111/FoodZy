@@ -1,0 +1,91 @@
+.authPage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-secondary);
+    padding: var(--spacing-lg);
+}
+
+.authContainer {
+    width: 100%;
+    max-width: 480px;
+}
+
+.authCard {
+    animation: scaleIn var(--transition-base);
+}
+
+.authHeader {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.authHeader h1 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-sm);
+}
+
+.authForm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.errorAlert {
+    padding: var(--spacing-md);
+    background: hsla(0, 84%, 60%, 0.1);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+}
+
+.forgotPassword {
+    text-align: right;
+    margin-top: calc(var(--spacing-sm) * -1);
+}
+
+.forgotPassword a {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.forgotPassword a:hover {
+    color: var(--color-primary);
+}
+
+.authFooter {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-gray-200);
+}
+
+.backHome {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+}
+
+.backHome a {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-fast);
+}
+
+.backHome a:hover {
+    color: var(--color-primary);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

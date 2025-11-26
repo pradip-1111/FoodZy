@@ -1,0 +1,212 @@
+.container {
+    width: 100%;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    padding-bottom: 1px;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--color-gray-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: var(--color-primary);
+}
+
+.activeTab {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 500;
+}
+
+.content {
+    position: relative;
+}
+
+.uploadArea {
+    border: 2px dashed var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--color-gray-50);
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadArea:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.uploadArea.dragging {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.preview {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-gray-100);
+    border: 1px solid var(--color-gray-200);
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.removeBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-error);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.removeBtn:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: var(--color-gray-500);
+}
+
+.icon {
+    font-size: 2rem;
+    color: var(--color-gray-400);
+}
+
+.text {
+    font-size: 0.95rem;
+}
+
+.subtext {
+    font-size: 0.8rem;
+    color: var(--color-gray-400);
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.urlInputContainer {
+    padding: 1rem;
+    background: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.inputWrapper:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.inputIcon {
+    color: var(--color-gray-400);
+    font-size: 1.1rem;
+}
+
+.urlInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    color: var(--color-gray-900);
+    width: 100%;
+}
+
+.urlInput::placeholder {
+    color: var(--color-gray-400);
+}
+
+.helpText {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+}
+
+.error {
+    margin-top: 0.5rem;
+    color: var(--color-error);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

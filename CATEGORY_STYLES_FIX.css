@@ -1,0 +1,53 @@
+/* ADD THESE STYLES TO page.module.css AFTER .categoryCard:hover .categoryOverlay */
+
+.categoryInfo {
+    padding: var(--spacing-lg);
+}
+
+.categoryName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: var(--spacing-xs);
+}
+
+.categoryDescription {
+    font-size: 0.875rem;
+    color: #4a5568;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.categoryArrow {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all var(--transition-base);
+}
+
+.categoryCard:hover .categoryArrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Loading Skeletons */
+.categoryCardSkeleton {
+    background: white;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}

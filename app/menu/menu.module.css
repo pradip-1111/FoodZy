@@ -1,0 +1,408 @@
+.menuPage {
+    min-height: 100vh;
+    background-color: var(--color-background);
+    padding-bottom: var(--spacing-3xl);
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 0;
+}
+
+.heroContent h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    letter-spacing: -1px;
+}
+
+.heroContent p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-background);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.controlsContainer {
+    display: flex;
+    gap: var(--spacing-xl);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.searchContainer {
+    flex: 0 0 300px;
+}
+
+.categoryScroll {
+    display: flex;
+    gap: var(--spacing-sm);
+    overflow-x: auto;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+}
+
+.categoryScroll::-webkit-scrollbar {
+    display: none;
+}
+
+.categoryBtn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--color-text-light);
+    border: 1px solid transparent;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.categoryBtn:hover {
+    background: var(--color-surface);
+    color: var(--color-primary);
+}
+
+.categoryBtn.active {
+    background: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.foodGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+}
+
+.foodCard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+}
+
+.foodCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: transparent;
+}
+
+.foodImageWrapper {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+}
+
+.foodImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.foodCard:hover .foodImage {
+    transform: scale(1.1);
+}
+
+.badges {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    gap: var(--spacing-xs);
+    z-index: 2;
+}
+
+.badge {
+    padding: 6px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(4px);
+}
+
+.badge.veg {
+    background-color: rgba(76, 175, 80, 0.9);
+    color: white;
+}
+
+.badge.vegan {
+    background-color: rgba(139, 195, 74, 0.9);
+    color: white;
+}
+
+.cardContent {
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.foodHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+    gap: var(--spacing-sm);
+}
+
+.foodName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.foodPrice {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+.foodDescription {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.addToCartBtn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    font-size: 1rem;
+}
+
+.addToCartBtn:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-4xl) 0;
+    color: var(--color-text-light);
+}
+
+.emptyStateIcon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.3;
+    color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+    .controlsContainer {
+        flex-direction: column-reverse;
+        gap: var(--spacing-md);
+    }
+
+    .searchContainer {
+        width: 100%;
+        flex: auto;
+    }
+
+    .categoryScroll {
+        width: 100%;
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .hero {
+        height: 240px;
+    }
+
+    .heroContent h1 {
+        font-size: 2.5rem;
+    }
+
+    .foodGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* New Sections Styles */
+.sectionTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-text);
+    position: relative;
+    display: inline-block;
+}
+
+.sectionTitle::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+}
+
+.featuredCategories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.categoryCard {
+    position: relative;
+    height: 160px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.categoryCard:hover {
+    transform: translateY(-5px);
+}
+
+.categoryCard img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.categoryCard:hover img {
+    transform: scale(1.1);
+}
+
+.categoryOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--spacing-lg);
+}
+
+.categoryOverlay h3 {
+    color: white;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.trendingSection {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.trendingScroll {
+    display: flex;
+    gap: var(--spacing-lg);
+    overflow-x: auto;
+    padding: var(--spacing-md) var(--spacing-xs);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.trendingScroll::-webkit-scrollbar {
+    display: none;
+}
+
+.trendingItem {
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.infoSection {
+    background: var(--color-surface);
+    padding: var(--spacing-3xl) 0;
+    margin-top: var(--spacing-3xl);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-2xl);
+    text-align: center;
+}
+
+.benefitCard {
+    padding: var(--spacing-xl);
+}
+
+.benefitIcon {
+    font-size: 3rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    background: var(--color-surface);
+    width: 80px;
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.benefitCard h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.benefitCard p {
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
