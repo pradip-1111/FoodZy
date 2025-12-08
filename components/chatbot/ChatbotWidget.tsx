@@ -1,10 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { processChatMessage, extractFoodItems, isOrderIntent } from '@/lib/ai/chatbot'
+import { processChatMessage } from '@/lib/ai/chatbot'
 import { getVoiceRecognition } from '@/lib/ai/voice'
-import { supabase } from '@/lib/supabase/client'
-import { useCart } from '@/contexts/CartContext'
 import { FaPaperPlane, FaMicrophone } from 'react-icons/fa'
 import { LuBot, LuX, LuMessageCircle, LuEraser } from 'react-icons/lu'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -16,7 +14,6 @@ interface Message {
 }
 
 export default function ChatbotWidget() {
-    const { addItem } = useCart()
     const [isOpen, setIsOpen] = useState(false)
     const [messages, setMessages] = useState<Message[]>([
         {
@@ -50,38 +47,9 @@ export default function ChatbotWidget() {
         setLoading(true)
 
         try {
-            if (isOrderIntent(userMessage)) {
-                const foodKeywords = extractFoodItems(userMessage)
-
-                if (foodKeywords.length > 0) {
-                    const { data: foodItems } = await supabase
-                        .from('food_items')
-                        .select('*')
-                        .eq('is_available', true)
-                        .ilike('name', `%${foodKeywords[0]}%`)
-                        .limit(3)
-
-                    if (foodItems && foodItems.length > 0) {
-                        await addItem(foodItems[0].id, 1, foodItems[0].current_price)
-
-                        const response = `Great choice! I've added ${foodItems[0].name} to your cart. 🛒\n${foodItems.length > 1
-                            ? `We also have ${foodItems.slice(1).map(item => item.name).join(', ')}. Would you like to try those?`
-                            : 'Anything else for your order?'
-                            }`
-
-                        setMessages(prev => [...prev, { role: 'assistant', content: response }])
-                    } else {
-                        const response = "I couldn't find that specific item. 😕\nWould you like to see our popular categories instead?"
-                        setMessages(prev => [...prev, { role: 'assistant', content: response }])
-                    }
-                } else {
-                    const response = await processChatMessage(userMessage, messages)
-                    setMessages(prev => [...prev, { role: 'assistant', content: response }])
-                }
-            } else {
-                const response = await processChatMessage(userMessage, messages)
-                setMessages(prev => [...prev, { role: 'assistant', content: response }])
-            }
+            // Always use AI chatbot for natural conversation
+            const response = await processChatMessage(userMessage, messages)
+            setMessages(prev => [...prev, { role: 'assistant', content: response }])
         } catch (error) {
             console.error('Chatbot error:', error)
             setMessages(prev => [...prev, {

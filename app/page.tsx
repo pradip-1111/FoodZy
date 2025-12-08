@@ -5,6 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import BannerCarousel from '@/components/home/BannerCarousel'
 import styles from './page.module.css'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -81,115 +82,101 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* 3D Food Showcase - Burger Section */}
-            <section className={`${styles.section} ${styles.showcase3DSection}`}>
+            {/* Banners Section */}
+            <BannerCarousel />
+
+            {/* 3D Food Showcase Grid */}
+            <section className={styles.modelsGridSection}>
                 <div className="container">
-                    <div className={styles.singleModelSection}>
-                        <div className={styles.modelContent}>
-                            <div className={styles.modelInfo}>
-                                <h2>Gourmet Burger</h2>
-                                <p className="text-secondary">
-                                    Experience our signature gourmet burger with premium beef patty, fresh vegetables,
-                                    and our special house sauce. Perfectly grilled to perfection.
-                                </p>
-                                <Link href="/menu">
-                                    <Button size="lg">Order Now</Button>
-                                </Link>
-                            </div>
-                            <div className={styles.singleModel3DViewer}>
+                    <div className={styles.sectionHeader}>
+                        <h2 className={styles.sectionTitle}>Interactive Food Showcase</h2>
+                        <p className={styles.sectionSubtitle}>
+                            Explore our delicious menu items in 3D
+                        </p>
+                    </div>
+                    <div className={styles.modelsGrid}>
+                        <div className={styles.modelCard}>
+                            <div className={styles.smallModelViewer}>
                                 <Model3DViewer modelPath="/videos/burger.glb" />
                             </div>
+                            <div className={styles.modelCardInfo}>
+                                <h3 className={styles.modelCardTitle}>Gourmet Burger</h3>
+                                <p className={styles.modelCardDesc}>
+                                    Experience our signature gourmet burger with premium beef patty, fresh vegetables, and our special house sauce.
+                                </p>
+                                <div className={styles.modelCardFooter}>
+                                    <Link href="/menu">
+                                        <Button size="sm" fullWidth>Order Now</Button>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* 3D Food Showcase - Momo Section */}
-            <section className={`${styles.section} ${styles.showcase3DSectionAlt}`}>
-                <div className="container">
-                    <div className={styles.singleModelSection}>
-                        <div className={styles.modelContent}>
-                            <div className={styles.singleModel3DViewer}>
+                        <div className={styles.modelCard}>
+                            <div className={styles.smallModelViewer}>
                                 <Model3DViewer modelPath="/videos/momo_food.glb" />
                             </div>
-                            <div className={styles.modelInfo}>
-                                <h2>Authentic Momos</h2>
-                                <p className="text-secondary">
-                                    Steamed to perfection, our momos are filled with flavorful ingredients and served
-                                    with our signature spicy dipping sauce. A crowd favorite!
+                            <div className={styles.modelCardInfo}>
+                                <h3 className={styles.modelCardTitle}>Authentic Momos</h3>
+                                <p className={styles.modelCardDesc}>
+                                    Steamed to perfection, our momos are filled with flavorful ingredients and served with spicy dipping sauce.
                                 </p>
-                                <Link href="/menu">
-                                    <Button size="lg">Order Now</Button>
-                                </Link>
+                                <div className={styles.modelCardFooter}>
+                                    <Link href="/menu">
+                                        <Button size="sm" fullWidth>Order Now</Button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* 3D Food Showcase - Thai Food Section */}
-            <section className={`${styles.section} ${styles.showcase3DSection}`}>
-                <div className="container">
-                    <div className={styles.singleModelSection}>
-                        <div className={styles.modelContent}>
-                            <div className={styles.modelInfo}>
-                                <h2>Thai Delicacy</h2>
-                                <p className="text-secondary">
-                                    Authentic Thai cuisine with aromatic herbs and spices. Experience the perfect balance
-                                    of sweet, sour, salty, and spicy flavors in every bite.
-                                </p>
-                                <Link href="/menu">
-                                    <Button size="lg">Order Now</Button>
-                                </Link>
-                            </div>
-                            <div className={styles.singleModel3DViewer}>
+                        <div className={styles.modelCard}>
+                            <div className={styles.smallModelViewer}>
                                 <Model3DViewer modelPath="/videos/thai_food_01.glb" />
                             </div>
+                            <div className={styles.modelCardInfo}>
+                                <h3 className={styles.modelCardTitle}>Thai Delicacy</h3>
+                                <p className={styles.modelCardDesc}>
+                                    Authentic Thai cuisine with aromatic herbs and spices. Experience the perfect balance of flavors.
+                                </p>
+                                <div className={styles.modelCardFooter}>
+                                    <Link href="/menu">
+                                        <Button size="sm" fullWidth>Order Now</Button>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* 3D Food Showcase - Cake Section */}
-            <section className={`${styles.section} ${styles.showcase3DSectionAlt}`}>
-                <div className="container">
-                    <div className={styles.singleModelSection}>
-                        <div className={styles.modelContent}>
-                            <div className={styles.singleModel3DViewer}>
+                        <div className={styles.modelCard}>
+                            <div className={styles.smallModelViewer}>
+                                <Model3DViewer modelPath="/videos/cake.glb" />
+                            </div>
+                            <div className={styles.modelCardInfo}>
+                                <h3 className={styles.modelCardTitle}>Deluxe Cake</h3>
+                                <p className={styles.modelCardDesc}>
+                                    Indulge in our premium cakes made with the finest ingredients. Perfect for celebrations.
+                                </p>
+                                <div className={styles.modelCardFooter}>
+                                    <Link href="/menu">
+                                        <Button size="sm" fullWidth>Order Now</Button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.modelCard}>
+                            <div className={styles.smallModelViewer}>
                                 <Model3DViewer modelPath="/videos/full.glb" />
                             </div>
-                            <div className={styles.modelInfo}>
-                                <h2>Deluxe Cake</h2>
-                                <p className="text-secondary">
-                                    Indulge in our premium cakes made with the finest ingredients. Perfect for celebrations
-                                    or treating yourself to something special.
+                            <div className={styles.modelCardInfo}>
+                                <h3 className={styles.modelCardTitle}>Full Breakfast</h3>
+                                <p className={styles.modelCardDesc}>
+                                    Start your day right with our complete breakfast platter. Includes eggs, toast, and fresh fruits.
                                 </p>
-                                <Link href="/menu">
-                                    <Button size="lg">Order Now</Button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3D Food Showcase - Full Breakfast Section */}
-            <section className={`${styles.section} ${styles.showcase3DSection}`}>
-                <div className="container">
-                    <div className={styles.singleModelSection}>
-                        <div className={styles.modelContent}>
-                            <div className={styles.modelInfo}>
-                                <h2>Full Breakfast</h2>
-                                <p className="text-secondary">
-                                    Start your day right with our complete breakfast platter. Includes eggs, toast,
-                                    fresh fruits, and your choice of beverage.
-                                </p>
-                                <Link href="/menu">
-                                    <Button size="lg">Order Now</Button>
-                                </Link>
-                            </div>
-                            <div className={styles.singleModel3DViewer}>
-                                <Model3DViewer modelPath="/videos/cake.glb" />
+                                <div className={styles.modelCardFooter}>
+                                    <Link href="/menu">
+                                        <Button size="sm" fullWidth>Order Now</Button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -457,37 +444,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className={styles.footer}>
-                <div className="container">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-xl mb-xl">
-                        <div>
-                            <h3 className="mb-md">FoodZy</h3>
-                            <p className="text-secondary">
-                                Delicious food delivered fast with AI-powered ordering
-                            </p>
-                        </div>
-                        <div>
-                            <h4 className="mb-md">Quick Links</h4>
-                            <div className={styles.footerLinks}>
-                                <Link href="/menu">{t('nav.menu')}</Link>
-                                <Link href="/login">{t('auth.login')}</Link>
-                                <Link href="/register">{t('auth.signup')}</Link>
-                                <Link href="/admin/login">Admin</Link>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="mb-md">Contact</h4>
-                            <p className="text-secondary">Email: support@foodzy.com</p>
-                            <p className="text-secondary">Phone: +1 234 567 8900</p>
-                        </div>
-                    </div>
-                    <div className="text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
-                        <p className="text-secondary">© 2024 FoodZy. All rights reserved.</p>
-                    </div>
-                </div>
-            </footer>
         </div>
     )
 }

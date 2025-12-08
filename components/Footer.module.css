@@ -1,0 +1,353 @@
+.footer {
+    position: relative;
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    padding: var(--spacing-3xl) 0 var(--spacing-lg);
+    margin-top: var(--spacing-3xl);
+    overflow: hidden;
+}
+
+.footerGradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.1) 0%,
+            rgba(245, 158, 11, 0.1) 50%,
+            rgba(255, 107, 107, 0.1) 100%);
+    pointer-events: none;
+}
+
+.footerContent {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
+    z-index: 1;
+}
+
+.footerColumn {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.brandSection {
+    margin-bottom: var(--spacing-md);
+}
+
+.brandName {
+    font-family: var(--font-display);
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--spacing-sm);
+}
+
+.brandTagline {
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+}
+
+.trustBadges {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.trustBadge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-base);
+}
+
+.trustBadge:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.badgeIcon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+}
+
+.columnTitle {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-inverse);
+}
+
+.linkList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.linkList li a {
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+    display: inline-block;
+}
+
+.linkList li a:hover {
+    color: var(--color-primary);
+    transform: translateX(4px);
+}
+
+.contactInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+}
+
+.contactIcon {
+    width: 18px;
+    height: 18px;
+    color: var(--color-secondary);
+    flex-shrink: 0;
+}
+
+.socialLinks {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.socialLink {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    color: var(--text-inverse);
+    transition: all var(--transition-base);
+}
+
+.socialLink:hover {
+    background: var(--gradient-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+}
+
+.socialLink svg {
+    width: 20px;
+    height: 20px;
+}
+
+.newsletterSection {
+    position: relative;
+    z-index: 1;
+    padding: var(--spacing-xl);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--spacing-2xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.newsletterContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .newsletterContent {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.newsletterText {
+    flex: 1;
+}
+
+.newsletterTitle {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.newsletterDesc {
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+}
+
+.newsletterForm {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex: 1;
+    max-width: 400px;
+}
+
+.newsletterInput {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--text-inverse);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-base);
+}
+
+.newsletterInput:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.newsletterInput::placeholder {
+    color: var(--color-gray-400);
+}
+
+.newsletterButton {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.newsletterButton:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.appDownloadSection {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.appDownloadText {
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.appBadges {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.appBadge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    color: var(--text-inverse);
+}
+
+.appBadge:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+}
+
+.appBadgeIcon {
+    width: 28px;
+    height: 28px;
+}
+
+.appBadgeSmall {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-gray-400);
+}
+
+.appBadgeLarge {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+
+.footerBottom {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .footerBottom {
+        flex-direction: row;
+    }
+}
+
+.copyright {
+    color: var(--color-gray-400);
+    font-size: var(--font-size-sm);
+}
+
+.paymentMethods {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.paymentText {
+    color: var(--color-gray-400);
+    font-size: var(--font-size-sm);
+    margin-right: var(--spacing-sm);
+}
+
+.paymentIcons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.paymentIcon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+}

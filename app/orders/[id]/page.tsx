@@ -12,7 +12,7 @@ import styles from '../orders.module.css'
 interface OrderItem {
     id: string
     quantity: number
-    price_at_order: number
+    unit_price: number
     food_item: {
         name: string
         image_url: string
@@ -46,7 +46,7 @@ export default function OrderDetailsPage() {
                         order_items (
                             id,
                             quantity,
-                            price_at_order,
+                            unit_price,
                             food_item:food_items(name, image_url)
                         )
                     `)
@@ -104,7 +104,7 @@ export default function OrderDetailsPage() {
                 <div className={styles.orderCard}>
                     <div className={styles.orderHeader}>
                         <div>
-                            <h1 style={{ fontSize: '1.5rem', margin: 0 }}>Order #{order.id.slice(0, 8)}</h1>
+                            <h1 className={styles.orderId} style={{ fontSize: '1.5rem', margin: 0 }}>Order #{order.id.slice(0, 8)}</h1>
                             <div className={styles.orderDate}>
                                 {new Date(order.created_at).toLocaleString()}
                             </div>
@@ -117,7 +117,7 @@ export default function OrderDetailsPage() {
                     {/* Tracking Steps */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', margin: '40px 0', position: 'relative' }}>
                         {/* Progress Bar Background */}
-                        <div style={{ position: 'absolute', top: '20px', left: '0', right: '0', height: '4px', background: '#eee', zIndex: 0 }}></div>
+                        <div style={{ position: 'absolute', top: '20px', left: '0', right: '0', height: '4px', background: 'var(--bg-secondary)', zIndex: 0 }}></div>
                         {/* Active Progress Bar */}
                         <div style={{
                             position: 'absolute',
@@ -139,18 +139,18 @@ export default function OrderDetailsPage() {
                                         width: '40px',
                                         height: '40px',
                                         borderRadius: '50%',
-                                        background: isActive ? 'var(--color-primary)' : 'white',
-                                        border: `2px solid ${isActive ? 'var(--color-primary)' : '#eee'}`,
+                                        background: isActive ? 'var(--color-primary)' : 'var(--bg-primary)',
+                                        border: `2px solid ${isActive ? 'var(--color-primary)' : 'var(--bg-secondary)'}`,
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        color: isActive ? 'white' : '#ccc',
+                                        color: isActive ? 'white' : 'var(--text-tertiary)',
                                         marginBottom: '8px',
                                         transition: 'all 0.3s ease'
                                     }}>
                                         <Icon />
                                     </div>
-                                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isActive ? 'var(--color-text)' : '#ccc' }}>
+                                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isActive ? 'var(--text-primary)' : 'var(--text-tertiary)' }}>
                                         {step.label}
                                     </span>
                                 </div>
@@ -158,10 +158,10 @@ export default function OrderDetailsPage() {
                         })}
                     </div>
 
-                    <h3 style={{ marginBottom: '20px' }}>Items</h3>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--text-primary)' }}>Items</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {order.order_items.map((item) => (
-                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #eee' }}>
+                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--color-gray-200)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                     <img
                                         src={item.food_item?.image_url || 'https://via.placeholder.com/50'}
@@ -169,19 +169,19 @@ export default function OrderDetailsPage() {
                                         style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }}
                                     />
                                     <div>
-                                        <div style={{ fontWeight: 700 }}>{item.food_item?.name}</div>
-                                        <div style={{ color: '#888', fontSize: '0.9rem' }}>Qty: {item.quantity}</div>
+                                        <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{item.food_item?.name}</div>
+                                        <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Qty: {item.quantity}</div>
                                     </div>
                                 </div>
-                                <div style={{ fontWeight: 700 }}>
-                                    ${(item.price_at_order * item.quantity).toFixed(2)}
+                                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                                    ${(item.unit_price * item.quantity).toFixed(2)}
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '1.2rem', fontWeight: 700 }}>Total Amount</span>
+                    <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid var(--color-gray-200)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>Total Amount</span>
                         <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-primary)' }}>
                             ${order.total_amount.toFixed(2)}
                         </span>

@@ -1,29 +1,149 @@
 .authPage {
     min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Left side - Visual showcase */
+.visualSide {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(147, 51, 234, 0.1));
+    overflow: hidden;
+}
+
+.visualSide::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 107, 0, 0.3), transparent);
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+    animation: pulse 8s ease-in-out infinite;
+}
+
+.visualSide::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.3), transparent);
+    border-radius: 50%;
+    bottom: -100px;
+    right: -100px;
+    animation: pulse 8s ease-in-out infinite reverse;
+}
+
+.brandSection {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+}
+
+.brandSection h2 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ff6b00, #9333ea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -2px;
+}
+
+.brandSection p {
+    font-size: var(--font-size-xl);
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+}
+
+.foodIllustration {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
+    animation: float 6s ease-in-out infinite;
+}
+
+.foodIllustration img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+}
+
+.features {
+    position: relative;
+    z-index: 2;
+    margin-top: var(--spacing-3xl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.feature {
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.feature .icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.feature h4 {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+}
+
+.feature p {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Right side - Form */
+.formSide {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gradient-secondary);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-3xl);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    position: relative;
 }
 
-.authContainer {
+.formContainer {
     width: 100%;
-    max-width: 480px;
-}
-
-.authCard {
-    animation: scaleIn var(--transition-base);
+    max-width: 450px;
+    position: relative;
+    z-index: 1;
 }
 
 .authHeader {
-    text-align: center;
     margin-bottom: var(--spacing-2xl);
 }
 
 .authHeader h1 {
-    font-size: var(--font-size-3xl);
+    font-size: 2.5rem;
+    color: #fff;
     margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+}
+
+.authHeader p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-base);
 }
 
 .authForm {
@@ -34,11 +154,12 @@
 
 .errorAlert {
     padding: var(--spacing-md);
-    background: hsla(0, 84%, 60%, 0.1);
-    border: 1px solid var(--color-error);
+    background: rgba(255, 59, 48, 0.15);
+    border-left: 3px solid #ff4d4f;
     border-radius: var(--radius-md);
-    color: var(--color-error);
+    color: #ff8a8a;
     font-size: var(--font-size-sm);
+    animation: slideInRight 0.3s ease-out;
 }
 
 .forgotPassword {
@@ -48,44 +169,123 @@
 
 .forgotPassword a {
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    transition: color var(--transition-fast);
+    color: rgba(255, 255, 255, 0.6);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.forgotPassword a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width var(--transition-fast);
 }
 
 .forgotPassword a:hover {
     color: var(--color-primary);
 }
 
+.forgotPassword a:hover::after {
+    width: 100%;
+}
+
 .authFooter {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
     text-align: center;
-    padding-top: var(--spacing-xl);
-    border-top: 1px solid var(--color-gray-200);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.authFooter p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+}
+
+.authFooter a {
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-left: var(--spacing-xs);
+    transition: all var(--transition-fast);
+}
+
+.authFooter a:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
 }
 
 .backHome {
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
     text-align: center;
 }
 
 .backHome a {
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.4);
     font-size: var(--font-size-sm);
-    transition: color var(--transition-fast);
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
 }
 
 .backHome a:hover {
-    color: var(--color-primary);
+    color: rgba(255, 255, 255, 0.8);
+    transform: translateX(-4px);
 }
 
-@keyframes scaleIn {
+/* Responsive */
+@media (max-width: 1024px) {
+    .authPage {
+        grid-template-columns: 1fr;
+    }
+
+    .visualSide {
+        display: none;
+    }
+
+    .formSide {
+        padding: var(--spacing-xl);
+    }
+}
+
+/* Animations */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(2deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
+}
+
+@keyframes slideInRight {
     from {
+        transform: translateX(20px);
         opacity: 0;
-        transform: scale(0.95);
     }
 
     to {
+        transform: translateX(0);
         opacity: 1;
-        transform: scale(1);
     }
 }

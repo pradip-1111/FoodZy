@@ -18,10 +18,10 @@
 }
 
 .cartItems {
-    background: white;
+    background: var(--color-surface);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .cartItem {
@@ -88,7 +88,7 @@
     height: 28px;
     border-radius: 50%;
     border: none;
-    background: white;
+    background: var(--color-surface);
     color: var(--color-text);
     cursor: pointer;
     display: flex;
@@ -129,10 +129,10 @@
 }
 
 .summary {
-    background: white;
+    background: var(--color-surface);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid rgba(0, 0, 0, 0.05);
     height: fit-content;
     position: sticky;
     top: 100px;

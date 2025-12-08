@@ -1,8 +1,6 @@
-// AI Chatbot integration using HuggingFace Inference API
-// This will process natural language queries and suggest food items
+// AI Chatbot integration for FoodZy
+// Uses /api/chat endpoint for dynamic AI responses
 
-const HUGGINGFACE_API_URL = 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill'
-const API_KEY = process.env.HUGGINGFACE_API_KEY
 
 export interface ChatMessage {
     role: 'user' | 'assistant'
@@ -16,44 +14,32 @@ export interface FoodSuggestion {
 }
 
 /**
- * Process user message and generate chatbot response
+ * Process user message and generate chatbot response using AI
  */
 export async function processChatMessage(
     message: string,
     conversationHistory: ChatMessage[] = []
 ): Promise<string> {
     try {
-        // If no API key, use simple rule-based chatbot
-        if (!API_KEY) {
-            return processSimpleChatbot(message)
-        }
-
-        const response = await fetch(HUGGINGFACE_API_URL, {
+        // Call our API route for AI-powered responses
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                inputs: {
-                    past_user_inputs: conversationHistory
-                        .filter(m => m.role === 'user')
-                        .map(m => m.content),
-                    generated_responses: conversationHistory
-                        .filter(m => m.role === 'assistant')
-                        .map(m => m.content),
-                    text: message,
-                },
+                userMessage: message,
+                messages: conversationHistory,
             }),
         })
 
         if (!response.ok) {
-            console.error('HuggingFace API error:', await response.text())
+            console.error('Chat API error:', response.status)
             return processSimpleChatbot(message)
         }
 
         const data = await response.json()
-        return data.generated_text || processSimpleChatbot(message)
+        return data.response || processSimpleChatbot(message)
     } catch (error) {
         console.error('Chatbot error:', error)
         return processSimpleChatbot(message)

@@ -101,7 +101,7 @@ export default function Navbar() {
                     </Link>
 
                     {/* Profile/Login */}
-                    <Link href="/login">
+                    <Link href="/profile">
                         <button className={styles.iconButton}>
                             <FaUser />
                         </button>

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import './professional-theme.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import ChatbotWidget from '@/components/chatbot/ChatbotWidget'
+import Footer from '@/components/Footer'
 
 import Navbar from '@/components/Navbar'
 
@@ -26,6 +28,7 @@ export default function RootLayout({
                         <CartProvider>
                             <Navbar />
                             {children}
+                            <Footer />
                             <ChatbotWidget />
                         </CartProvider>
                     </LanguageProvider>

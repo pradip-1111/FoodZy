@@ -98,21 +98,17 @@ export default function AdminOrders() {
 
             if (error) throw error
 
-            // Also add to history
-            await supabase
-                .from('order_status_history')
-                .insert([{
-                    order_id: orderId,
-                    status: newStatus,
-                    notes: `Status updated to ${newStatus} by admin`
-                }])
+            if (error) throw error
+
+            // The database trigger 'track_order_status' automatically adds an entry 
+            // to order_status_history, so we don't need to do it manually here.
 
             setIsStatusModalOpen(false)
             setSelectedOrder(null)
             fetchOrders()
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error updating status:', error)
-            alert('Failed to update status')
+            alert(`Failed to update status: ${error.message || 'Unknown error'}`)
         }
     }
 

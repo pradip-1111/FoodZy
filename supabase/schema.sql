@@ -622,5 +622,45 @@ CREATE POLICY "Allow public read access to active banners" ON banners
     FOR SELECT USING (is_active = true);
 
 CREATE POLICY "Allow admin full access to banners" ON banners
-    FOR ALL USING (true);
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM public.admin_users WHERE id = auth.uid())
+    );
+
+-- =============================================
+-- STORAGE BUCKETS
+-- =============================================
+
+-- Note: Storage buckets are typically created via the Supabase dashboard or API,
+-- but here is the SQL to create the 'banners' bucket if supported by your setup.
+
+-- INSERT INTO storage.buckets (id, name, public) 
+-- VALUES ('banners', 'banners', true)
+-- ON CONFLICT (id) DO NOTHING;
+
+-- Storage Policies
+
+-- CREATE POLICY "Public Access" 
+-- ON storage.objects FOR SELECT 
+-- USING ( bucket_id = 'banners' );
+
+-- CREATE POLICY "Authenticated users can upload banners" 
+-- ON storage.objects FOR INSERT 
+-- WITH CHECK ( 
+--   bucket_id = 'banners' 
+--   AND auth.role() = 'authenticated'
+-- );
+
+-- CREATE POLICY "Authenticated users can update banners" 
+-- ON storage.objects FOR UPDATE
+-- USING ( 
+--   bucket_id = 'banners' 
+--   AND auth.role() = 'authenticated'
+-- );
+
+-- CREATE POLICY "Authenticated users can delete banners" 
+-- ON storage.objects FOR DELETE
+-- USING ( 
+--   bucket_id = 'banners' 
+--   AND auth.role() = 'authenticated'
+-- );
 

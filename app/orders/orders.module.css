@@ -1,14 +1,14 @@
 .ordersPage {
     min-height: 100vh;
     padding: var(--spacing-3xl) 0;
-    background-color: var(--color-background);
+    background-color: var(--bg-secondary);
 }
 
 .title {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: var(--spacing-2xl);
-    color: var(--color-text);
+    color: var(--text-primary);
 }
 
 .ordersList {
@@ -18,17 +18,17 @@
 }
 
 .orderCard {
-    background: white;
+    background: var(--bg-primary);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-gray-200);
     transition: transform 0.2s ease;
 }
 
 .orderCard:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-glow);
 }
 
 .orderHeader {
@@ -37,17 +37,17 @@
     align-items: center;
     margin-bottom: var(--spacing-lg);
     padding-bottom: var(--spacing-lg);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--color-gray-200);
 }
 
 .orderId {
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--text-primary);
     font-size: 1.1rem;
 }
 
 .orderDate {
-    color: var(--color-text-light);
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -60,22 +60,22 @@
 }
 
 .statusBadge.pending {
-    background: #FFF3E0;
+    background: rgba(245, 124, 0, 0.1);
     color: #F57C00;
 }
 
 .statusBadge.preparing {
-    background: #E3F2FD;
+    background: rgba(25, 118, 210, 0.1);
     color: #1976D2;
 }
 
-.statusBadge.ontheway {
-    background: #E8F5E9;
+.statusBadge.out_for_delivery {
+    background: rgba(56, 142, 60, 0.1);
     color: #388E3C;
 }
 
 .statusBadge.delivered {
-    background: #EEEEEE;
+    background: rgba(97, 97, 97, 0.1);
     color: #616161;
 }
 
@@ -93,12 +93,13 @@
 
 .viewBtn {
     padding: var(--spacing-sm) var(--spacing-lg);
-    background: var(--color-surface);
-    color: var(--color-text);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     text-decoration: none;
     border-radius: var(--radius-lg);
     font-weight: 600;
     transition: all 0.2s ease;
+    border: 1px solid var(--color-primary);
 }
 
 .viewBtn:hover {
@@ -109,5 +110,5 @@
 .emptyState {
     text-align: center;
     padding: var(--spacing-4xl) 0;
-    color: var(--color-text-light);
+    color: var(--text-secondary);
 }

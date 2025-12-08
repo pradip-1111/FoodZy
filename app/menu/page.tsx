@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaSearch, FaShoppingBag, FaLeaf, FaUtensils } from 'react-icons/fa'
 import { supabase } from '@/lib/supabase/client'
@@ -27,9 +28,26 @@ interface FoodItem {
     }
 }
 
+// Helper function to get category-specific Unsplash image IDs
+const getCategoryImageId = (categoryName: string): string => {
+    const imageMap: { [key: string]: string } = {
+        'Pizza': '1565299624946-b28f40a0ae38',
+        'Burgers': '1568901346375-23c9450c58cd',
+        'Sushi': '1579584425555-c3ce17fd4351',
+        'Desserts': '1551024506-0bccd828d307',
+        'Salads': '1512621776951-a57141f2eefd',
+        'Pasta': '1621996346565-e3dbc646d9a9',
+        'Beverages': '1544145945-f90425340c7e',
+        'Appetizers': '1541529086209-51b2f0f155d4'
+    }
+
+    return imageMap[categoryName] || '1504674900247-0877df9cc836'
+}
+
 export default function MenuPage() {
     const { addItem } = useCart()
     const { t } = useLanguage()
+    const searchParams = useSearchParams()
     const [foodItems, setFoodItems] = useState<FoodItem[]>([])
     const [categories, setCategories] = useState<any[]>([])
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
@@ -37,9 +55,13 @@ export default function MenuPage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        const categoryParam = searchParams.get('category')
+        if (categoryParam) {
+            setSelectedCategory(categoryParam)
+        }
         fetchCategories()
         fetchFoodItems()
-    }, [])
+    }, [searchParams])
 
     const fetchCategories = async () => {
         const { data } = await supabase
@@ -68,7 +90,7 @@ export default function MenuPage() {
     const filteredItems = foodItems.filter(item => {
         const matchesCategory = selectedCategory === 'all' || item.category_id === selectedCategory
         const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            (item.description || '').toLowerCase().includes(searchQuery.toLowerCase())
         return matchesCategory && matchesSearch
     })
 
@@ -85,7 +107,25 @@ export default function MenuPage() {
         <div className={styles.menuPage}>
             {/* Hero Section */}
             <div className={styles.hero}>
-                <div className={styles.heroContent}>
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className={styles.heroVideo}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        zIndex: 0
+                    }}
+                >
+                    <source src="/videos/FoodZy2.mp4" type="video/mp4" />
+                </video>
+                <div className={styles.heroContent} style={{ position: 'relative', zIndex: 2 }}>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -114,7 +154,7 @@ export default function MenuPage() {
                             onClick={() => setSelectedCategory(category.id)}
                         >
                             <img
-                                src={`https://source.unsplash.com/400x300/?${category.name},food`}
+                                src={category.image_url || `https://images.unsplash.com/photo-${getCategoryImageId(category.name)}?w=400&h=300&fit=crop&q=80`}
                                 alt={category.name}
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'

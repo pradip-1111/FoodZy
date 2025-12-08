@@ -81,9 +81,9 @@ export default function AdminBanners() {
 
             await fetchBanners()
             closeModal()
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving banner:', error)
-            alert('Failed to save banner')
+            alert(`Failed to save banner: ${error.message || error}`)
         } finally {
             setLoading(false)
         }

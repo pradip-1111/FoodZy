@@ -789,10 +789,6 @@
     transition: color var(--transition-fast);
 }
 
-.footerLinks a:hover {
-    color: white;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .heroSection {
@@ -845,4 +841,80 @@
         flex-direction: column;
         gap: var(--spacing-md);
     }
+}
+
+/* 3D Models Grid Section */
+.modelsGridSection {
+    background: var(--gradient-dark);
+    padding: var(--spacing-4xl) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.modelsGridSection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.modelsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.modelCard {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+}
+
+.modelCard:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.smallModelViewer {
+    height: 250px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modelCardInfo {
+    padding: var(--spacing-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.modelCardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: white;
+}
+
+.modelCardDesc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.modelCardFooter {
+    margin-top: auto;
 }

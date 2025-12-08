@@ -1,0 +1,27 @@
+/* Professional Food Delivery Color Overrides */
+:root {
+    /* Primary - Deep Emerald Green */
+    --color-primary: hsl(158, 64%, 52%) !important;
+    --color-primary-light: hsl(158, 64%, 62%) !important;
+    --color-primary-dark: hsl(158, 64%, 42%) !important;
+
+    /* Secondary - Warm Amber */
+    --color-secondary: hsl(38, 92%, 50%) !important;
+    --color-secondary-light: hsl(38, 92%, 60%) !important;
+    --color-secondary-dark: hsl(38, 92%, 40%) !important;
+
+    /* Accent - Rich Coral */
+    --color-accent: hsl(0, 100%, 71%) !important;
+    --color-accent-light: hsl(0, 100%, 81%) !important;
+    --color-accent-dark: hsl(0, 100%, 61%) !important;
+
+    /* Updated Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(158, 64%, 52%) 0%, hsl(158, 64%, 42%) 100%) !important;
+    --gradient-secondary: linear-gradient(135deg, hsl(38, 92%, 50%) 0%, hsl(0, 100%, 71%) 100%) !important;
+    --gradient-accent: linear-gradient(135deg, hsl(0, 100%, 71%) 0%, hsl(0, 100%, 61%) 100%) !important;
+    --gradient-hero: linear-gradient(135deg, hsl(158, 64%, 52%) 0%, hsl(38, 92%, 50%) 50%, hsl(0, 100%, 71%) 100%) !important;
+
+    /* Updated Shadows */
+    --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+    --shadow-glow-amber: 0 0 20px rgba(245, 158, 11, 0.3) !important;
+}

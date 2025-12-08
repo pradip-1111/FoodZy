@@ -7,8 +7,8 @@ export default function AdminSettings() {
     // Mock settings state for now since we don't have a settings table yet
     const [settings, setSettings] = useState({
         restaurantName: 'FoodZy',
-        email: 'admin@foodzy.com',
-        phone: '+1 234 567 890',
+        email: 'sarrafpradeep857@gmail.com',
+        phone: '+91 7070824102',
         address: '123 Food Street, Tasty City',
         currency: 'USD',
         deliveryFee: 5.00,

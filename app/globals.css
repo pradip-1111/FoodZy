@@ -6,19 +6,19 @@
 
 :root {
   /* Color Palette - Vibrant & Modern */
-  --color-primary: hsl(25, 95%, 53%);
+  --color-primary: hsl(24, 100%, 50%);
   /* Vibrant Orange */
-  --color-primary-light: hsl(25, 95%, 63%);
-  --color-primary-dark: hsl(25, 95%, 43%);
+  --color-primary-light: hsl(24, 100%, 60%);
+  --color-primary-dark: hsl(24, 100%, 40%);
 
-  --color-secondary: hsl(280, 70%, 60%);
+  --color-secondary: hsl(24, 100%, 45%);
   /* Purple */
-  --color-secondary-light: hsl(280, 70%, 70%);
-  --color-secondary-dark: hsl(280, 70%, 50%);
+  --color-secondary-light: hsl(24, 100%, 55%);
+  --color-secondary-dark: hsl(24, 100%, 35%);
 
-  --color-accent: hsl(340, 82%, 52%);
+  --color-accent: hsl(24, 100%, 50%);
   /* Pink/Red */
-  --color-accent-light: hsl(340, 82%, 62%);
+  --color-accent-light: hsl(24, 100%, 60%);
 
   --color-success: hsl(142, 71%, 45%);
   --color-warning: hsl(45, 93%, 47%);
@@ -60,8 +60,8 @@
   --color-surface-hover: var(--bg-tertiary);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  --gradient-primary: linear-gradient(135deg, hsl(24, 100%, 50%) 0%, hsl(24, 100%, 45%) 100%);
+  --gradient-secondary: linear-gradient(135deg, hsl(24, 100%, 55%) 0%, hsl(24, 100%, 50%) 100%);
   --gradient-dark: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
 
   /* Shadows */
