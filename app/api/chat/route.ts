@@ -1,16 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function POST(request: NextRequest) {
     try {
         const { messages, userMessage } = await request.json()
         console.log('🤖 Chat API called with message:', userMessage)
 
-        // Use Groq API for fast, free AI responses
+        // Check if user wants to order something specific
+        const orderIntent = await detectOrderIntent(userMessage)
+
+        if (orderIntent.hasIntent && orderIntent.foodType) {
+            // Fetch actual items from database
+            const items = await fetchFoodItems(orderIntent.foodType)
+
+            if (items && items.length > 0) {
+                return NextResponse.json({
+                    response: `Great! 🍕 I found ${items.length} delicious ${orderIntent.foodType} options for you. Check them out below!`,
+                    source: 'database',
+                    items: items,
+                    action: 'show_items'
+                })
+            }
+        }
+
+        // Use Groq API for conversational responses
         const GROQ_API_KEY = process.env.GROQ_API_KEY || 'gsk_demo_key'
         const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-        console.log('🔑 Groq API Key present:', GROQ_API_KEY ? 'Yes' : 'No')
-        console.log('🔑 API Key length:', GROQ_API_KEY?.length)
-        console.log('🔑 API Key prefix:', GROQ_API_KEY?.substring(0, 8))
 
         // Build conversation context
         const conversationMessages = [
@@ -84,6 +104,45 @@ Delivery typically takes 30-45 minutes.`
             { error: 'Failed to process message' },
             { status: 500 }
         )
+    }
+}
+
+async function detectOrderIntent(message: string) {
+    const lowerMessage = message.toLowerCase()
+    const orderKeywords = ['order', 'want', 'get', 'buy', 'i\'d like', 'show me']
+    const hasOrderIntent = orderKeywords.some(keyword => lowerMessage.includes(keyword))
+
+    let foodType = null
+    if (lowerMessage.includes('pizza')) foodType = 'pizza'
+    else if (lowerMessage.includes('burger')) foodType = 'burger'
+    else if (lowerMessage.includes('pasta')) foodType = 'pasta'
+    else if (lowerMessage.includes('salad')) foodType = 'salad'
+    else if (lowerMessage.includes('dessert') || lowerMessage.includes('cake') || lowerMessage.includes('ice cream')) foodType = 'dessert'
+
+    return {
+        hasIntent: hasOrderIntent,
+        foodType
+    }
+}
+
+async function fetchFoodItems(foodType: string) {
+    try {
+        const { data: items, error } = await supabase
+            .from('food_items')
+            .select('id, name, description, current_price, image_url, category_id')
+            .ilike('name', `%${foodType}%`)
+            .eq('is_available', true)
+            .limit(5)
+
+        if (error) {
+            console.error('Database error:', error)
+            return null
+        }
+
+        return items
+    } catch (error) {
+        console.error('Error fetching food items:', error)
+        return null
     }
 }
 

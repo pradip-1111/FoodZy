@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { processChatMessage } from '@/lib/ai/chatbot'
 import { getVoiceRecognition } from '@/lib/ai/voice'
-import { FaPaperPlane, FaMicrophone } from 'react-icons/fa'
+import { useCart } from '@/contexts/CartContext'
+import Link from 'next/link'
+import { FaPaperPlane, FaMicrophone, FaShoppingCart, FaPlus } from 'react-icons/fa'
 import { LuBot, LuX, LuMessageCircle, LuEraser } from 'react-icons/lu'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from './ChatbotWidget.module.css'
@@ -11,6 +12,16 @@ import styles from './ChatbotWidget.module.css'
 interface Message {
     role: 'user' | 'assistant'
     content: string
+    items?: FoodItem[]
+}
+
+interface FoodItem {
+    id: string
+    name: string
+    description: string
+    current_price: number
+    image_url: string
+    category_id: string
 }
 
 export default function ChatbotWidget() {
@@ -26,12 +37,14 @@ export default function ChatbotWidget() {
     const [isListening, setIsListening] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const voiceRecognition = getVoiceRecognition()
+    // Fix: Use addItem instead of addToCart as per CartContext definition
+    const { addItem } = useCart()
 
     const suggestedQuestions = [
-        "Show me the menu 🍔",
-        "Track my order 🛵",
+        "Order pizza 🍕",
+        "Show me burgers 🍔",
         "I'm vegetarian 🥗",
-        "Spicy food recommendations 🌶️"
+        "Track my order 🛵"
     ]
 
     useEffect(() => {
@@ -47,9 +60,31 @@ export default function ChatbotWidget() {
         setLoading(true)
 
         try {
-            // Always use AI chatbot for natural conversation
-            const response = await processChatMessage(userMessage, messages)
-            setMessages(prev => [...prev, { role: 'assistant', content: response }])
+            // Call the chat API directly to get structured responses
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userMessage,
+                    messages
+                })
+            })
+
+            const data = await response.json()
+
+            // Check if we got items to display
+            if (data.items && data.items.length > 0) {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: data.response,
+                    items: data.items
+                }])
+            } else {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: data.response
+                }])
+            }
         } catch (error) {
             console.error('Chatbot error:', error)
             setMessages(prev => [...prev, {
@@ -86,6 +121,17 @@ export default function ChatbotWidget() {
                 }
             )
         }
+    }
+
+    const handleAddToCart = (item: FoodItem) => {
+        // Fix: Use addItem with correct parameters (id, quantity, price)
+        addItem(item.id, 1, item.current_price)
+
+        // Add confirmation message
+        setMessages(prev => [...prev, {
+            role: 'assistant',
+            content: `✅ Added "${item.name}" to your cart! You can continue shopping or go to checkout.`
+        }])
     }
 
     const clearChat = () => {
@@ -130,7 +176,7 @@ export default function ChatbotWidget() {
                                     <span className={styles.statusDot} />
                                 </div>
                                 <div className={styles.headerInfo}>
-                                    <h3>Assistant</h3>
+                                    <h3>FoodZy Assistant</h3>
                                     <span className={styles.subtitle}>Always here to help</span>
                                 </div>
                             </div>
@@ -154,21 +200,82 @@ export default function ChatbotWidget() {
 
                         <div className={styles.chatMessages}>
                             {messages.map((message, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.botMessage}`}
-                                >
-                                    {message.role === 'assistant' && (
-                                        <div className={styles.messageAvatar}>
-                                            <LuBot />
+                                <div key={index}>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.botMessage}`}
+                                    >
+                                        {message.role === 'assistant' && (
+                                            <div className={styles.messageAvatar}>
+                                                <LuBot />
+                                            </div>
+                                        )}
+                                        <div className={styles.messageContent}>
+                                            {message.content}
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Display food items if present */}
+                                    {message.items && message.items.length > 0 && (
+                                        <div style={{ marginLeft: message.role === 'assistant' ? '40px' : '0', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            {message.items.map((item) => (
+                                                <motion.div
+                                                    key={item.id}
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    style={{
+                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                        borderRadius: '12px',
+                                                        padding: '12px',
+                                                        display: 'flex',
+                                                        gap: '12px',
+                                                        alignItems: 'center',
+                                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={item.image_url || 'https://via.placeholder.com/60'}
+                                                        alt={item.name}
+                                                        style={{
+                                                            width: '60px',
+                                                            height: '60px',
+                                                            borderRadius: '8px',
+                                                            objectFit: 'cover'
+                                                        }}
+                                                    />
+                                                    <div style={{ flex: 1, color: 'white' }}>
+                                                        <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{item.name}</div>
+                                                        <div style={{ fontSize: '12px', opacity: 0.9, marginBottom: '4px' }}>{item.description?.substring(0, 50)}...</div>
+                                                        <div style={{ fontSize: '16px', fontWeight: '700' }}>${item.current_price.toFixed(2)}</div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleAddToCart(item)}
+                                                        style={{
+                                                            background: 'white',
+                                                            color: '#667eea',
+                                                            border: 'none',
+                                                            borderRadius: '8px',
+                                                            padding: '8px 16px',
+                                                            fontWeight: '600',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '6px',
+                                                            fontSize: '13px',
+                                                            transition: 'transform 0.2s'
+                                                        }}
+                                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                    >
+                                                        <FaPlus size={12} />
+                                                        Add
+                                                    </button>
+                                                </motion.div>
+                                            ))}
                                         </div>
                                     )}
-                                    <div className={styles.messageContent}>
-                                        {message.content}
-                                    </div>
-                                </motion.div>
+                                </div>
                             ))}
                             {loading && (
                                 <motion.div
