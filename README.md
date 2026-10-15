@@ -10,7 +10,7 @@ A full-stack food delivery platform built with Next.js 14, featuring AI-powered 
 - **Multi-Lingual Support**: Available in English, Arabic, Hindi, Spanish, and French
 - **Menu Browsing**: Browse by category, search, and filter food items
 - **Shopping Cart**: Add, remove, and update quantities
-- **Order Tracking**: Real-time order status updates
+- **Order Tracking**: Real-time order status updates here
 - **User Profiles**: Manage profile and delivery addresses
 - **Offers & Discounts**: Apply promo codes and view special offers
 
