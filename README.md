@@ -4,7 +4,7 @@ A full-stack food delivery platform built with Next.js 14, featuring AI-powered 
 
 ## 🚀 Features
 
-### User-Side Features
+### User-Side Feature
 - **AI Chatbot Ordering**: Order food naturally through conversational AI
 - **Voice Ordering**: Use voice commands to place orders hands-free
 - **Multi-Lingual Support**: Available in English, Arabic, Hindi, Spanish, and French
