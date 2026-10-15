@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
+const isMobileBuild = process.env.CAPACITOR_BUILD === 'true';
+
 const nextConfig = {
-    output: 'export',
+    ...(isMobileBuild ? { output: 'export' } : {}),
 
     images: {
         unoptimized: true,

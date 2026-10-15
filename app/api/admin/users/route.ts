@@ -27,9 +27,17 @@ export async function GET() {
         }
 
         // 2. Initialize Supabase Admin Client (Service Role)
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+        if (!supabaseUrl || !serviceRoleKey) {
+            console.error('Missing Supabase admin environment variables')
+            return NextResponse.json({ error: 'Server configuration error: missing admin credentials' }, { status: 500 })
+        }
+
         const supabaseAdmin = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            supabaseUrl,
+            serviceRoleKey,
             {
                 auth: {
                     autoRefreshToken: false,
@@ -37,6 +45,7 @@ export async function GET() {
                 }
             }
         )
+
 
         // 3. Fetch All Users from Auth (Source of Truth)
         const { data: { users }, error } = await supabaseAdmin.auth.admin.listUsers()
