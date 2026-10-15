@@ -118,7 +118,7 @@ export default function TermsPage() {
                             If you have any questions about these Terms, please contact us at:
                         </p>
                         <ul>
-                            <li>Email: sarrafpradeep857@gmail.com</li>
+                            <li>Email: sreekar234@gmail.com</li>
                             <li>Phone: +91 7070824102</li>
                             <li>Address: 123 Food Street, Culinary City, FC 12345</li>
                         </ul>

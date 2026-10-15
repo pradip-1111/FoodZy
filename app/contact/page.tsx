@@ -67,7 +67,7 @@ export default function ContactPage() {
                                     </svg>
                                 </div>
                                 <h3>Email</h3>
-                                <p>sarrafpradeep857@gmail.com</p>
+                                <p>sreekar234@gmail.com</p>
                                 <span className={styles.responseTime}>Response in 24 hours</span>
                             </div>
 
