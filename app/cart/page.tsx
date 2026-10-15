@@ -204,7 +204,7 @@ export default function CartPage() {
                                     <div className={styles.itemHeader}>
                                         <h3 className={styles.itemName}>{item.food_item?.name}</h3>
                                         <span className={styles.itemPrice}>
-                                            ${(item.price_at_add * item.quantity).toFixed(2)}
+                                            ₹{(item.price_at_add * item.quantity).toFixed(0)}
                                         </span>
                                     </div>
 
@@ -241,11 +241,11 @@ export default function CartPage() {
                         <h2 className={styles.summaryTitle}>Order Summary</h2>
                         <div className={styles.summaryRow}>
                             <span>Subtotal</span>
-                            <span>${total.toFixed(2)}</span>
+                            <span>₹{total.toFixed(0)}</span>
                         </div>
                         <div className={styles.summaryRow}>
                             <span>Delivery Fee</span>
-                            <span>$5.00</span>
+                            <span>₹40</span>
                         </div>
 
                         <div className={styles.paymentMethods}>
@@ -340,7 +340,7 @@ export default function CartPage() {
                                         <div className={styles.qrCode}>
                                             <p>Scan to Pay</p>
                                             <QRCodeSVG
-                                                value={`upi://pay?pa=${upiId}&pn=FoodZy&am=${(total + 5).toFixed(2)}`}
+                                                value={`upi://pay?pa=${upiId}&pn=FoodZy&am=${(total + 40).toFixed(0)}`}
                                                 size={128}
                                             />
                                         </div>
@@ -357,7 +357,7 @@ export default function CartPage() {
 
                         <div className={styles.totalRow}>
                             <span>Total</span>
-                            <span>${(total + 5).toFixed(2)}</span>
+                            <span>₹{(total + 40).toFixed(0)}</span>
                         </div>
                         <button className={styles.checkoutBtn} onClick={handleCheckout}>
                             {t('order.place')}

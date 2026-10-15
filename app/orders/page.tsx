@@ -100,7 +100,7 @@ export default function OrdersPage() {
                                 </div>
                                 <div className={styles.orderDetails}>
                                     <div className={styles.orderTotal}>
-                                        ${order.total_amount.toFixed(2)}
+                                        ₹{order.total_amount.toFixed(0)}
                                     </div>
                                     <Link href={`/orders/detail?id=${order.id}`} className={styles.viewBtn}>
                                         {t('order.track')}

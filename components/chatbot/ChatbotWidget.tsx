@@ -259,7 +259,7 @@ export default function ChatbotWidget() {
                                                     <div style={{ flex: 1, color: 'white' }}>
                                                         <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{item.name}</div>
                                                         <div style={{ fontSize: '12px', opacity: 0.9, marginBottom: '4px' }}>{item.description?.substring(0, 50)}...</div>
-                                                        <div style={{ fontSize: '16px', fontWeight: '700' }}>₹{item.current_price.toFixed(2)}</div>
+                                                        <div style={{ fontSize: '16px', fontWeight: '700' }}>₹{item.current_price.toFixed(0)}</div>
                                                     </div>
                                                     <button
                                                         onClick={() => handleAddToCart(item)}

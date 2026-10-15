@@ -31,7 +31,7 @@ const faqs = [
             },
             {
                 q: 'How much is the delivery fee?',
-                a: 'Delivery fees vary based on distance and demand. Orders over $30 qualify for free delivery. You\'ll see the exact fee before checkout.'
+                a: 'Delivery fees vary based on distance and demand. Orders over ₹499 qualify for free delivery. You\'ll see the exact fee before checkout.'
             },
             {
                 q: 'How long does delivery take?',

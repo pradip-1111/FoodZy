@@ -183,7 +183,7 @@ export default function ChatBot() {
                                                 />
                                                 <div className={styles.productInfo}>
                                                     <div className={styles.productName}>{item.name}</div>
-                                                    <div className={styles.productPrice}>${item.current_price.toFixed(2)}</div>
+                                                    <div className={styles.productPrice}>₹{item.current_price.toFixed(0)}</div>
                                                 </div>
                                             </Link>
                                         ))}

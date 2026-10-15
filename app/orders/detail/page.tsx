@@ -175,7 +175,7 @@ export default function OrderDetailsPage() {
                                     </div>
                                 </div>
                                 <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-                                    ${(item.unit_price * item.quantity).toFixed(2)}
+                                    ₹{(item.unit_price * item.quantity).toFixed(0)}
                                 </div>
                             </div>
                         ))}
@@ -184,7 +184,7 @@ export default function OrderDetailsPage() {
                     <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid var(--color-gray-200)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>Total Amount</span>
                         <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-primary)' }}>
-                            ${order.total_amount.toFixed(2)}
+                            ₹{order.total_amount.toFixed(0)}
                         </span>
                     </div>
                 </div>

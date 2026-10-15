@@ -425,7 +425,7 @@ export default function HomePage() {
                                     <svg className={styles.ctaFeatureIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <span>Free Delivery on Orders Over $30</span>
+                                    <span>Free Delivery on Orders Over ₹499</span>
                                 </div>
                                 <div className={styles.ctaFeature}>
                                     <svg className={styles.ctaFeatureIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
