@@ -4,15 +4,20 @@ A full-stack food delivery platform built with Next.js 14, featuring AI-powered 
 
 ## 🚀 Features
 
-### User-Side Feature
-- **AI Chatbot Ordering**: Order food naturally through conversational AI
-- **Voice Ordering**: Use voice commands to place orders hands-free
-- **Multi-Lingual Support**: Available in English, Arabic, Hindi, Spanish, and French
-- **Menu Browsing**: Browse by category, search, and filter food items
-- **Shopping Cart**: Add, remove, and update quantities
-- **Order Tracking**: Real-time order status updates here
-- **User Profiles**: Manage profile and delivery addresses
-- **Offers & Discounts**: Apply promo codes and view special offers
+### User-Side Features
+- **🔍 Instant Live Search**: Search menu items in real-time with live suggestions, keyboard navigation, and quick tags (Burger, Pizza, Indian, Sushi, etc.)
+- **💪 Nutritional Information**: Health & fitness tracking with **Calories (kcal)** and **Protein (g)** clearly displayed on food cards
+- **🍛 Authentic Indian Cuisine**: Expanded menu with popular Indian dishes (Butter Chicken, Biryani, Paneer Tikka, Dal Makhani, Masala Dosa, and more)
+- **₹ Rupee Currency**: Standardized pricing in Indian Rupees (₹) across the entire application (Menu, Cart, Orders, FAQ, and ChatBot)
+- **🤖 AI Chatbot Ordering**: Order food naturally through conversational AI
+- **🎙️ Voice Ordering**: Use voice commands to place orders hands-free
+- **🌐 Multi-Lingual Support**: Available in English, Arabic, Hindi, Spanish, and French
+- **🍽️ Menu Browsing**: Browse by category, search, and filter food items
+- **🛒 Shopping Cart**: Add, remove, and update quantities with UPI / Card / COD payment options
+- **📦 Order Tracking**: Real-time order status updates and interactive order timeline
+- **👤 User Profiles**: Manage profile, delivery addresses, and map location picker
+- **🎁 Offers & Discounts**: Apply promo codes and view special offers
+
 
 ### Admin-Side Features
 - **Food Management**: CRUD operations for menu items
