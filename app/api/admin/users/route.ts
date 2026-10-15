@@ -1,14 +1,21 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { createClient as createServerSupabase } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
     try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+        if (!supabaseUrl || !serviceRoleKey) {
+            console.error('Missing Supabase admin environment variables')
+            return NextResponse.json({ error: 'Server configuration error: missing admin credentials' }, { status: 500 })
+        }
+
         // 1. Verify Authentication & Admin Role
-        const supabase = createRouteHandlerClient({ cookies })
+        const supabase = createServerSupabase()
         const { data: { session } } = await supabase.auth.getSession()
 
         if (!session) {
@@ -22,20 +29,14 @@ export async function GET() {
             .eq('id', session.user.id)
             .single()
 
+
         if (!adminUser) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
         // 2. Initialize Supabase Admin Client (Service Role)
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const supabaseAdmin = createAdminClient(
 
-        if (!supabaseUrl || !serviceRoleKey) {
-            console.error('Missing Supabase admin environment variables')
-            return NextResponse.json({ error: 'Server configuration error: missing admin credentials' }, { status: 500 })
-        }
-
-        const supabaseAdmin = createClient(
             supabaseUrl,
             serviceRoleKey,
             {
