@@ -8,6 +8,7 @@ import { FaPaperPlane, FaMicrophone, FaShoppingCart, FaPlus } from 'react-icons/
 import { LuBot, LuX, LuMessageCircle, LuEraser } from 'react-icons/lu'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from './ChatbotWidget.module.css'
+import { processChatbotMessage } from '@/lib/ai/chatbot'
 
 interface Message {
     role: 'user' | 'assistant'
@@ -51,7 +52,7 @@ export default function ChatbotWidget() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages, isOpen])
 
-    const handleSendMessage = async (text: string = input) => {
+    const handleSendMessage = async (text: string = input, isVoice: boolean = false) => {
         if (!text || typeof text !== 'string' || !text.trim()) return
 
         const userMessage = text.trim()
@@ -60,17 +61,24 @@ export default function ChatbotWidget() {
         setLoading(true)
 
         try {
-            // Call the chat API directly to get structured responses
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userMessage,
-                    messages
-                })
-            })
+            // Process user message with client-side AI/matcher
+            const data = await processChatbotMessage(userMessage, messages)
 
-            const data = await response.json()
+            // Auto add to cart if requested via voice or order intent
+            if (data.autoAddToCart && data.orderedItem) {
+                await addItem(data.orderedItem.id, data.quantity || 1, data.orderedItem.current_price)
+
+                // Voice feedback if speech synthesis available
+                if (isVoice && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                    try {
+                        const utterance = new SpeechSynthesisUtterance(`Added ${data.orderedItem.name} to your cart`)
+                        utterance.rate = 1.0
+                        window.speechSynthesis.speak(utterance)
+                    } catch (e) {
+                        console.error('Speech synthesis error:', e)
+                    }
+                }
+            }
 
             // Check if we got items to display
             if (data.items && data.items.length > 0) {
@@ -112,7 +120,8 @@ export default function ChatbotWidget() {
                     if (result && result.transcript) {
                         setInput(result.transcript)
                         if (result.isFinal) {
-                            handleSendMessage(result.transcript)
+                            setIsListening(false)
+                            handleSendMessage(result.transcript, true)
                         }
                     }
                 },
@@ -235,8 +244,11 @@ export default function ChatbotWidget() {
                                                     }}
                                                 >
                                                     <img
-                                                        src={item.image_url || 'https://via.placeholder.com/60'}
+                                                        src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'}
                                                         alt={item.name}
+                                                        onError={(e) => {
+                                                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'
+                                                        }}
                                                         style={{
                                                             width: '60px',
                                                             height: '60px',
@@ -247,7 +259,7 @@ export default function ChatbotWidget() {
                                                     <div style={{ flex: 1, color: 'white' }}>
                                                         <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{item.name}</div>
                                                         <div style={{ fontSize: '12px', opacity: 0.9, marginBottom: '4px' }}>{item.description?.substring(0, 50)}...</div>
-                                                        <div style={{ fontSize: '16px', fontWeight: '700' }}>${item.current_price.toFixed(2)}</div>
+                                                        <div style={{ fontSize: '16px', fontWeight: '700' }}>₹{item.current_price.toFixed(2)}</div>
                                                     </div>
                                                     <button
                                                         onClick={() => handleAddToCart(item)}

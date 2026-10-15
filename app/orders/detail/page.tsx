@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { supabase } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { FaArrowLeft, FaCheckCircle, FaTruck, FaBoxOpen, FaClipboardCheck } from 'react-icons/fa'
 import styles from '../orders.module.css'
 
@@ -28,7 +28,8 @@ interface Order {
 }
 
 export default function OrderDetailsPage() {
-    const { id } = useParams()
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
     const { user } = useAuth()
     const { t } = useLanguage()
     const [order, setOrder] = useState<Order | null>(null)

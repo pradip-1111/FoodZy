@@ -102,7 +102,7 @@ export default function OrdersPage() {
                                     <div className={styles.orderTotal}>
                                         ${order.total_amount.toFixed(2)}
                                     </div>
-                                    <Link href={`/orders/${order.id}`} className={styles.viewBtn}>
+                                    <Link href={`/orders/detail?id=${order.id}`} className={styles.viewBtn}>
                                         {t('order.track')}
                                     </Link>
                                 </div>

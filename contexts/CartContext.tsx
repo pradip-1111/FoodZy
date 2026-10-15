@@ -36,14 +36,49 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([])
     const [loading, setLoading] = useState(true)
 
+    const GUEST_CART_KEY = 'foodzy_guest_cart'
+
+    const getLocalCart = (): CartItem[] => {
+        if (typeof window === 'undefined') return []
+        try {
+            const raw = localStorage.getItem(GUEST_CART_KEY)
+            return raw ? JSON.parse(raw) : []
+        } catch {
+            return []
+        }
+    }
+
+    const saveLocalCart = (cartItems: CartItem[]) => {
+        if (typeof window === 'undefined') return
+        try {
+            localStorage.setItem(GUEST_CART_KEY, JSON.stringify(cartItems))
+        } catch (e) {
+            console.error('Failed to save guest cart:', e)
+        }
+    }
+
     const refreshCart = async () => {
         if (!user) {
-            setItems([])
+            setItems(getLocalCart())
             setLoading(false)
             return
         }
 
         try {
+            // Check if there are guest items to merge
+            const guestItems = getLocalCart()
+            if (guestItems.length > 0) {
+                for (const gItem of guestItems) {
+                    await supabase.from('cart_items').insert({
+                        user_id: user.id,
+                        food_item_id: gItem.food_item_id,
+                        quantity: gItem.quantity,
+                        price_at_add: gItem.price_at_add,
+                    })
+                }
+                localStorage.removeItem(GUEST_CART_KEY)
+            }
+
             const { data, error } = await supabase
                 .from('cart_items')
                 .select(`
@@ -67,7 +102,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const addItem = async (foodItemId: string, quantity: number, price: number) => {
         if (!user) {
-            alert('Please login to add items to cart')
+            // Guest mode: save to localStorage
+            try {
+                const currentItems = getLocalCart()
+                const existingIndex = currentItems.findIndex(i => i.food_item_id === foodItemId)
+
+                if (existingIndex > -1) {
+                    currentItems[existingIndex].quantity += quantity
+                } else {
+                    // Fetch food item info for guest cart preview
+                    const { data: foodItem } = await supabase
+                        .from('food_items')
+                        .select('name, image_url, current_price, is_available')
+                        .eq('id', foodItemId)
+                        .maybeSingle()
+
+                    currentItems.push({
+                        id: 'guest_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                        food_item_id: foodItemId,
+                        quantity,
+                        price_at_add: price,
+                        food_item: foodItem || {
+                            name: 'Food Item',
+                            image_url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80',
+                            current_price: price,
+                            is_available: true
+                        }
+                    })
+                }
+
+                saveLocalCart(currentItems)
+                setItems([...currentItems])
+            } catch (err) {
+                console.error('Error adding guest item:', err)
+            }
             return
         }
 
@@ -97,6 +165,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     const removeItem = async (cartItemId: string) => {
+        if (!user) {
+            const currentItems = getLocalCart().filter(i => i.id !== cartItemId)
+            saveLocalCart(currentItems)
+            setItems(currentItems)
+            return
+        }
+
         try {
             const { error } = await supabase
                 .from('cart_items')
@@ -117,6 +192,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
             return
         }
 
+        if (!user) {
+            const currentItems = getLocalCart().map(i => i.id === cartItemId ? { ...i, quantity } : i)
+            saveLocalCart(currentItems)
+            setItems(currentItems)
+            return
+        }
+
         try {
             const { error } = await supabase
                 .from('cart_items')
@@ -132,7 +214,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     const clearCart = async () => {
-        if (!user) return
+        if (!user) {
+            if (typeof window !== 'undefined') localStorage.removeItem(GUEST_CART_KEY)
+            setItems([])
+            return
+        }
 
         try {
             const { error } = await supabase

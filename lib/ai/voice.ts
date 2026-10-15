@@ -77,12 +77,27 @@ export class VoiceRecognition {
         this.onErrorCallback = onError
         this.isListening = true
 
-        try {
-            this.recognition.start()
-        } catch (error) {
-            console.error('Error starting voice recognition:', error)
-            this.isListening = false
-            onError?.('Failed to start voice recognition')
+        // Request microphone permission before starting recognition
+        if (typeof navigator !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    // Permission granted, start recognition
+                    this.recognition.start();
+                })
+                .catch((permError) => {
+                    console.error('Microphone permission denied:', permError);
+                    this.isListening = false;
+                    onError?.('Microphone permission denied');
+                });
+        } else {
+            // Fallback: attempt to start directly (may trigger permission prompt)
+            try {
+                this.recognition.start();
+            } catch (error) {
+                console.error('Error starting voice recognition:', error);
+                this.isListening = false;
+                onError?.('Failed to start voice recognition');
+            }
         }
     }
 

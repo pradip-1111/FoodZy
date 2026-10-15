@@ -1,132 +1,256 @@
-// AI Chatbot integration for FoodZy
-// Uses /api/chat endpoint for dynamic AI responses
+// Client-side AI Chatbot & Voice Assistant for FoodZy
+// Supports static exports & mobile Capacitor builds
 
+import { supabase } from '@/lib/supabase/client'
 
-export interface ChatMessage {
-    role: 'user' | 'assistant'
-    content: string
-}
-
-export interface FoodSuggestion {
-    name: string
+export interface FoodItem {
     id: string
-    confidence: number
+    name: string
+    description: string
+    current_price: number
+    image_url: string
+    category_id: string
+    is_available?: boolean
+    is_vegetarian?: boolean
+    is_vegan?: boolean
+    categories?: {
+        name: string
+    }
 }
 
-/**
- * Process user message and generate chatbot response using AI
- */
-export async function processChatMessage(
-    message: string,
-    conversationHistory: ChatMessage[] = []
-): Promise<string> {
-    try {
-        // Call our API route for AI-powered responses
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userMessage: message,
-                messages: conversationHistory,
-            }),
-        })
+export interface ChatbotResponse {
+    response: string
+    items?: FoodItem[]
+    autoAddToCart?: boolean
+    orderedItem?: FoodItem
+    quantity?: number
+}
 
-        if (!response.ok) {
-            console.error('Chat API error:', response.status)
-            return processSimpleChatbot(message)
+// Word to number mapping for spoken quantities
+const NUMBER_WORDS: { [key: string]: number } = {
+    'one': 1, 'a': 1, 'an': 1, 'single': 1,
+    'two': 2, 'couple': 2, 'double': 2,
+    'three': 3, 'triple': 3,
+    'four': 4,
+    'five': 5
+}
+
+function extractQuantity(text: string): number {
+    const lower = text.toLowerCase()
+
+    // Check digit pattern: "2 burgers" or "3x pizza"
+    const digitMatch = lower.match(/\b(\d+)\s*(?:x|of)?\b/)
+    if (digitMatch) {
+        const num = parseInt(digitMatch[1], 10)
+        if (num > 0 && num <= 20) return num
+    }
+
+    // Check word pattern: "two burgers", "a pizza"
+    for (const [word, val] of Object.entries(NUMBER_WORDS)) {
+        const regex = new RegExp(`\\b${word}\\s+([a-z]+)`, 'i')
+        if (regex.test(lower)) {
+            return val
+        }
+    }
+
+    return 1
+}
+
+// Cache food items in memory to make chatbot instant
+let cachedFoodItems: FoodItem[] | null = null
+let lastCacheTime = 0
+
+async function getAvailableFoodItems(): Promise<FoodItem[]> {
+    const now = Date.now()
+    if (cachedFoodItems && now - lastCacheTime < 60000) {
+        return cachedFoodItems
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('food_items')
+            .select(`
+                *,
+                categories (name)
+            `)
+            .eq('is_available', true)
+
+        if (error) {
+            console.error('Error fetching food items for chatbot:', error)
+            return cachedFoodItems || []
         }
 
-        const data = await response.json()
-        return data.response || processSimpleChatbot(message)
-    } catch (error) {
-        console.error('Chatbot error:', error)
-        return processSimpleChatbot(message)
+        cachedFoodItems = (data || []) as FoodItem[]
+        lastCacheTime = now
+        return cachedFoodItems
+    } catch (e) {
+        console.error('Exception fetching food items:', e)
+        return cachedFoodItems || []
     }
 }
 
 /**
- * Simple rule-based chatbot fallback
+ * Process a user message (from voice or text) and return intelligent action + response
  */
-function processSimpleChatbot(message: string): string {
-    const lowerMessage = message.toLowerCase()
+export async function processChatbotMessage(
+    userMessage: string,
+    _history: any[] = []
+): Promise<ChatbotResponse> {
+    const rawMessage = (userMessage || '').trim()
+    const message = rawMessage.toLowerCase()
+
+    if (!message) {
+        return {
+            response: "I didn't quite catch that. What delicious meal can I get for you today? 🍔🍕",
+            items: []
+        }
+    }
+
+    const foodItems = await getAvailableFoodItems()
 
     // Greetings
-    if (lowerMessage.match(/^(hi|hello|hey|good morning|good evening)/)) {
-        return "Hello! 👋 I'm your food ordering assistant. I can help you find and order delicious food. What would you like to eat today?"
-    }
-
-    // Order intent
-    if (lowerMessage.includes('order') || lowerMessage.includes('want') || lowerMessage.includes('get')) {
-        if (lowerMessage.includes('burger')) {
-            return "Great choice! 🍔 We have several burger options. Let me show you our burger menu. Would you like a classic beef burger, chicken burger, or veggie burger?"
+    if (/^(hi|hello|hey|yo|good morning|good afternoon|good evening)\b/i.test(message)) {
+        return {
+            response: "Hello there! 👋 Welcome to FoodZy! I can take your order, recommend delicious meals, or show our menu. What are you craving today?",
+            items: foodItems.slice(0, 3)
         }
-        if (lowerMessage.includes('pizza')) {
-            return "Excellent! 🍕 We have amazing pizzas. Would you prefer Margherita, Pepperoni, Vegetarian, or BBQ Chicken pizza?"
+    }
+
+    // Order & add intent keywords
+    const orderKeywords = [
+        'order', 'add', 'get', 'want', 'buy', 'take', 'cart',
+        'have', 'give me', 'bring', 'send', 'deliver', 'craving', 'need', 'eat'
+    ]
+    const hasOrderIntent = orderKeywords.some(keyword => message.includes(keyword))
+
+    // Check vegetarian / vegan
+    const isVegQuery = message.includes('veg') || message.includes('plant') || message.includes('salad')
+
+    // 1. Food item name match
+    let matchedItem: FoodItem | null = null
+    let highestScore = 0
+
+    for (const item of foodItems) {
+        const itemNameLower = item.name.toLowerCase()
+
+        // Exact substring match
+        if (message.includes(itemNameLower)) {
+            matchedItem = item
+            highestScore = 100
+            break
         }
-        if (lowerMessage.includes('pasta')) {
-            return "Wonderful! 🍝 Our pasta dishes are delicious. We have Carbonara, Bolognese, Alfredo, and Pesto pasta. Which one sounds good?"
+
+        // Word-by-word token match (e.g. "cheeseburger" inside "Classic Cheeseburger")
+        const itemWords = itemNameLower.split(/\s+/)
+        let score = 0
+        for (const word of itemWords) {
+            if (word.length > 2 && message.includes(word)) {
+                score += 25
+            }
         }
-        if (lowerMessage.includes('salad')) {
-            return "Healthy choice! 🥗 We have Caesar Salad, Greek Salad, and Garden Fresh Salad. Which would you like?"
+
+        if (score > highestScore) {
+            highestScore = score
+            matchedItem = item
         }
-        if (lowerMessage.includes('drink') || lowerMessage.includes('beverage')) {
-            return "Sure! 🥤 We have soft drinks, juices, smoothies, and coffee. What would you like to drink?"
+    }
+
+    if (highestScore < 25) {
+        matchedItem = null
+    }
+
+    const quantity = extractQuantity(message)
+
+    // 2. Action: Order specific matched item
+    if (matchedItem && (hasOrderIntent || highestScore >= 40)) {
+        const relatedItems = foodItems.filter(
+            f => f.category_id === matchedItem!.category_id && f.id !== matchedItem!.id
+        ).slice(0, 3)
+
+        return {
+            response: `✅ Added ${quantity > 1 ? `${quantity}x ` : ''}"${matchedItem.name}" (₹${(matchedItem.current_price * quantity).toFixed(2)}) to your cart! 🛒 Would you like anything else?`,
+            autoAddToCart: true,
+            orderedItem: matchedItem,
+            quantity,
+            items: [matchedItem, ...relatedItems]
         }
-        return "I'd be happy to help you order! Could you tell me what type of food you're craving? We have burgers, pizzas, pasta, salads, and more!"
     }
 
-    // Menu inquiry
-    if (lowerMessage.includes('menu') || lowerMessage.includes('what do you have')) {
-        return "We have a wide variety of delicious options! 🍽️ Our menu includes:\n• Burgers 🍔\n• Pizzas 🍕\n• Pasta 🍝\n• Salads 🥗\n• Desserts 🍰\n• Beverages 🥤\n\nWhat would you like to explore?"
-    }
-
-    // Vegetarian/Vegan
-    if (lowerMessage.includes('vegetarian') || lowerMessage.includes('vegan')) {
-        return "We have great vegetarian and vegan options! 🌱 Let me show you our plant-based menu items."
-    }
-
-    // Price inquiry
-    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('how much')) {
-        return "Our prices vary by item. You can browse our menu to see detailed pricing. Most items range from ₹150 to ₹500. Would you like to see a specific category?"
-    }
-
-    // Delivery
-    if (lowerMessage.includes('delivery') || lowerMessage.includes('deliver')) {
-        return "We deliver to your location! 🚚 Delivery typically takes 30-45 minutes. You can track your order in real-time once it's placed."
-    }
-
-    // Help
-    if (lowerMessage.includes('help')) {
-        return "I'm here to help! You can:\n• Ask about our menu\n• Order food by telling me what you want\n• Check delivery options\n• Ask about prices\n\nJust let me know what you need!"
-    }
-
-    // Default response
-    return "I'm here to help you order food! You can tell me what you'd like to eat, ask about our menu, or browse our categories. What can I get for you today? 😊"
-}
-
-/**
- * Extract food item names from user message
- */
-export function extractFoodItems(message: string): string[] {
-    const lowerMessage = message.toLowerCase()
-    const foodKeywords = [
-        'burger', 'pizza', 'pasta', 'salad', 'sandwich', 'fries',
-        'chicken', 'beef', 'fish', 'vegetarian', 'vegan',
-        'margherita', 'pepperoni', 'carbonara', 'alfredo',
-        'caesar', 'greek', 'coffee', 'tea', 'juice', 'smoothie',
-        'cake', 'ice cream', 'dessert'
+    // 3. Category matching
+    const categories = [
+        { key: 'burger', name: 'Burgers', defaultItem: 'Classic Cheeseburger', emoji: '🍔' },
+        { key: 'pizza', name: 'Pizza', defaultItem: 'Margherita Pizza', emoji: '🍕' },
+        { key: 'sushi', name: 'Sushi', defaultItem: 'California Roll', emoji: '🍣' },
+        { key: 'pasta', name: 'Pasta', defaultItem: 'Fettuccine Alfredo', emoji: '🍝' },
+        { key: 'dessert', name: 'Desserts', defaultItem: 'Chocolate Lava Cake', emoji: '🍰' },
+        { key: 'cake', name: 'Desserts', defaultItem: 'Chocolate Lava Cake', emoji: '🍰' },
+        { key: 'ice cream', name: 'Desserts', defaultItem: 'Mango Sorbet', emoji: '🍨' },
+        { key: 'salad', name: 'Salads', defaultItem: 'Caesar Salad', emoji: '🥗' },
+        { key: 'drink', name: 'Beverages', defaultItem: 'Cold Brew Coffee', emoji: '🥤' },
+        { key: 'beverage', name: 'Beverages', defaultItem: 'Cold Brew Coffee', emoji: '🥤' },
+        { key: 'coffee', name: 'Beverages', defaultItem: 'Cold Brew Coffee', emoji: '☕' },
+        { key: 'shake', name: 'Beverages', defaultItem: 'Chocolate Milkshake', emoji: '🥤' }
     ]
 
-    return foodKeywords.filter(keyword => lowerMessage.includes(keyword))
-}
+    const matchedCategory = categories.find(c => message.includes(c.key))
 
-/**
- * Determine if message is an order intent
- */
-export function isOrderIntent(message: string): boolean {
-    const lowerMessage = message.toLowerCase()
-    const orderKeywords = ['order', 'want', 'get', 'buy', 'add', 'cart']
-    return orderKeywords.some(keyword => lowerMessage.includes(keyword))
+    if (matchedCategory) {
+        const categoryItems = foodItems.filter(f =>
+            f.categories?.name?.toLowerCase() === matchedCategory.name.toLowerCase() ||
+            f.name.toLowerCase().includes(matchedCategory.key)
+        )
+
+        // If user said "order a burger" or "order pizza" (with order intent)
+        if (hasOrderIntent) {
+            const targetItem = categoryItems.find(i => i.name.toLowerCase() === matchedCategory.defaultItem.toLowerCase()) || categoryItems[0]
+
+            if (targetItem) {
+                return {
+                    response: `✅ Added our popular "${targetItem.name}" to your cart! ${matchedCategory.emoji}🛒 Check out other delicious ${matchedCategory.name} options below:`,
+                    autoAddToCart: true,
+                    orderedItem: targetItem,
+                    quantity,
+                    items: categoryItems.slice(0, 4)
+                }
+            }
+        }
+
+        // Browsing category
+        return {
+            response: `Here are our best ${matchedCategory.name} options! ${matchedCategory.emoji} Click 'Add' on any item to order:`,
+            items: categoryItems.slice(0, 4)
+        }
+    }
+
+    // 4. Vegetarian / Vegan filter
+    if (isVegQuery) {
+        const vegItems = foodItems.filter(f => f.is_vegetarian || f.is_vegan)
+        return {
+            response: "🌱 Here are our fresh and delicious vegetarian options! Say 'order [dish]' or click 'Add':",
+            items: vegItems.slice(0, 4)
+        }
+    }
+
+    // 5. General menu inquiry
+    if (message.includes('menu') || message.includes('what do you have') || message.includes('options') || message.includes('food')) {
+        return {
+            response: "We have an amazing selection of Burgers 🍔, Pizza 🍕, Sushi 🍣, Pasta 🍝, Desserts 🍰, Salads 🥗, and Beverages 🥤! Tell me what you'd like to eat or say 'order [dish]'!",
+            items: foodItems.slice(0, 4)
+        }
+    }
+
+    // 6. Track order inquiry
+    if (message.includes('track') || message.includes('status') || message.includes('where is my order')) {
+        return {
+            response: "🛵 You can track your ongoing orders in real-time! Simply click 'Orders' in the top navigation bar.",
+            items: []
+        }
+    }
+
+    // 7. Default fallback with recommendations
+    const popularItems = foodItems.slice(0, 3)
+    return {
+        response: `I'm ready to take your order! 🤖 You can say "Order Classic Cheeseburger", "Add Margherita Pizza", or "Show me sushi". Here are some popular favourites:`,
+        items: popularItems
+    }
 }

@@ -1,0 +1,6 @@
+{
+    "appId": "com.foodzy.app",
+    "appName": "FoodZy",
+    "webDir": "out",
+    "bundledWebRuntime": false
+}
